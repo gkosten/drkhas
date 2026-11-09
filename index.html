@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Визитка: Хасароков М.А.</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .premium-card {
+      width: 320px;
+      height: 480px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s ease;
+      border: 1px solid #eef0f2;
+    }
+    .premium-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+      border-color: #2c3e50;
+    }
+    .card-photo-wrapper {
+      height: 65%;
+      overflow: hidden;
+    }
+    .card-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-content {
+      padding: 20px;
+      text-align: center;
+    }
+    .card-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0 0 6px 0;
+      line-height: 1.1;
+    }
+    .card-specialty {
+      font-size: 13px;
+      color: #7f8c8d;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 20px 0;
+      font-weight: 600;
+    }
+    .card-phone {
+      font-size: 17px;
+      color: #2980b9;
+      font-weight: 600;
+      margin: 0 0 24px 0;
+    }
+    .card-link-wrapper {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+    }
+    .card-link {
+      font-size: 11px;
+      color: #bdc3c7;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-link span {
+      color: #2980b9;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+    }
+    .premium-card:hover .card-link span {
+      transform: translateX(6px);
+    }
+  </style>
+</head>
+<body>
+  <div class="premium-card">
+    <div class="card-photo-wrapper">
+      <img src="URL_ФОТО" alt="Хасароков М.А." class="card-photo">
+    </div>
+    <div class="card-content">
+      <h1 class="card-name">Хасароков Мурат Азнаурович</h1>
+      <div class="card-specialty">Ортопед‑хирург</div>
+      <div class="card-phone">+7 (925) 155‑52‑46</div>
+    </div>
+    <div class="card-link-wrapper">
+      <a href="https://www.medswiss.ru/nashi-vrachi/khasarokov-murat-aznaurovich/" class="card-link">
+        Профиль на сайте <span>→</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
