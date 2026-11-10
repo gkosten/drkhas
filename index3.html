@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>AR-визитка врача</title>
+
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      color: #173746;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .panel {
+      position: fixed;
+      z-index: 10;
+      left: 16px;
+      right: 16px;
+      bottom: 24px;
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 8px 32px #0003;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 23px;
+    }
+
+    p {
+      margin: 8px 0 16px;
+      line-height: 1.45;
+    }
+
+    button, .button {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      color: white;
+      background: #187e7a;
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    #hint {
+      position: fixed;
+      z-index: 10;
+      top: 20px;
+      left: 16px;
+      right: 16px;
+      padding: 12px;
+      border-radius: 12px;
+      color: white;
+      background: #173746dd;
+      text-align: center;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <section id="intro" class="panel">
+    <h1>Оживить визитку</h1>
+    <p id="introText">
+      Разрешите доступ к камере,
+      затем наведите её на изображение на визитке.
+    </p>
+    <button id="start" type="button">Включить AR</button>
+  </section>
+
+  <div id="hint" hidden>
+    Наведите камеру на изображение на визитке
+  </div>
+
+  <section id="contacts" class="panel" hidden>
+    <!-- Замените заглушки перед публикацией -->
+    <h1>Фамилия Имя Отчество</h1>
+    <p>Травматолог-ортопед<br>Название клиники</p>
+    <a class="button" href="tel:+70000000000">
+      Позвонить
+    </a>
+  </section>
+
+  <a-scene
+    mindar-image="
+      imageTargetSrc: ./targets.mind;
+      autoStart: false;
+      uiLoading: no;
+      uiScanning: no;
+      uiError: no;
+    "
+    color-space="sRGB"
+    renderer="colorManagement: true; alpha: true"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
+
+    <a-camera
+      position="0 0 0"
+      look-controls="enabled: false">
+    </a-camera>
+
+    <a-light type="ambient" intensity="1.2"></a-light>
+    <a-light
+      type="directional"
+      position="1 2 3"
+      intensity="1.5">
+    </a-light>
+
+    <!-- Первая и единственная картинка в targets.mind -->
+    <a-entity id="target" mindar-image-target="targetIndex: 0">
+
+      <!-- Ось Z направлена от плоскости визитки -->
+      <a-entity
+        position="0 0 0.22"
+        animation="
+          property: position;
+          from: 0 0 0.18;
+          to: 0 0 0.28;
+          dur: 1800;
+          dir: alternate;
+          loop: true;
+          easing: easeInOutSine">
+
+        <!-- Объёмная бирюзовая медицинская эмблема -->
+        <a-box
+          width="0.16"
+          height="0.48"
+          depth="0.12"
+          color="#28b8ad">
+        </a-box>
+
+        <a-box
+          width="0.48"
+          height="0.16"
+          depth="0.12"
+          color="#28b8ad">
+        </a-box>
+
+        <!-- Вращающееся объёмное кольцо -->
+        <a-entity
+          rotation="25 0 0"
+          animation="
+            property: rotation;
+            from: 25 0 0;
+            to: 25 0 360;
+            dur: 7000;
+            easing: linear;
+            loop: true">
+
+          <a-torus
+            radius="0.36"
+            radius-tubular="0.018"
+            color="#a8e8df">
+          </a-torus>
+
+          <a-sphere
+            position="0.36 0 0"
+            radius="0.045"
+            color="#187e7a">
+          </a-sphere>
+
+        </a-entity>
+      </a-entity>
+    </a-entity>
+  </a-scene>
+
+  <script>
+    const scene = document.querySelector("a-scene");
+    const target = document.querySelector("#target");
+    const intro = document.querySelector("#intro");
+    const introText = document.querySelector("#introText");
+    const startButton = document.querySelector("#start");
+    const contacts = document.querySelector("#contacts");
+    const hint = document.querySelector("#hint");
+
+    function showError() {
+      intro.hidden = false;
+      hint.hidden = true;
+      contacts.hidden = true;
+      introText.textContent =
+        "Не удалось запустить AR. Проверьте разрешение камеры, " +
+        "HTTPS и наличие файла targets.mind. " +
+        "Попробуйте открыть страницу в Safari или Chrome.";
+      startButton.textContent = "Перезагрузить страницу";
+      startButton.disabled = false;
+      startButton.onclick = () => location.reload();
+    }
+
+    scene.addEventListener("arError", showError);
+
+    startButton.onclick = async () => {
+      startButton.disabled = true;
+      introText.textContent = "Запускаем камеру…";
+
+      try {
+        if (!scene.hasLoaded) {
+          await new Promise(resolve => {
+            scene.addEventListener("loaded", resolve, { once: true });
+          });
+        }
+
+        const ar = scene.systems["mindar-image-system"];
+        await ar.start();
+
+        intro.hidden = true;
+        hint.hidden = false;
+      } catch (error) {
+        console.error(error);
+        showError();
+      }
+    };
+
+    target.addEventListener("targetFound", () => {
+      contacts.hidden = false;
+      hint.hidden = true;
+    });
+
+    target.addEventListener("targetLost", () => {
+      contacts.hidden = true;
+      hint.hidden = false;
+    });
+  </script>
+</body>
+</html>

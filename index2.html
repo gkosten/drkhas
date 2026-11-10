@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102e3c">
+  <title>Визитка врача</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #173746;
+      background:
+        radial-gradient(circle at 15% 10%, #d6f2ee, transparent 50%),
+        #edf3f6;
+    }
+
+    .card {
+      width: min(100%, 420px);
+      padding: 36px 28px;
+      border: 1px solid #ffffff;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 24px 70px #17374618;
+      text-align: center;
+      animation: appear .8s ease-out both;
+    }
+
+    .emblem {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 28px;
+      border-radius: 50%;
+      color: #187e7a;
+      background: #e7f5f2;
+    }
+
+    .emblem::before {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border: 2px solid #87c9bd;
+      border-radius: 50%;
+      animation: pulse 2.8s ease-in-out infinite;
+    }
+
+    .emblem svg { width: 52px; height: 52px; }
+
+    .label {
+      margin: 0 0 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #64808c;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 6vw, 30px);
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .specialty {
+      margin: 14px 0 24px;
+      color: #187e7a;
+      font-size: 18px;
+    }
+
+    .details {
+      padding: 18px;
+      margin-bottom: 24px;
+      border-radius: 16px;
+      background: #f2f7f8;
+      line-height: 1.6;
+      text-align: left;
+      overflow-wrap: anywhere;
+    }
+
+    .details p { margin: 0; }
+    .details p + p { margin-top: 6px; }
+
+    .actions { display: grid; gap: 12px; }
+
+    .button {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      border: 0;
+      border-radius: 14px;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+      color: white;
+      background: #187e7a;
+    }
+
+    .button.secondary {
+      color: #173746;
+      background: #eaf0f3;
+    }
+
+    .button:focus-visible {
+      outline: 3px solid #173746;
+      outline-offset: 4px;
+    }
+
+    .note {
+      margin: 20px 0 0;
+      color: #64808c;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(.96); opacity: .45; }
+      50% { transform: scale(1.08); opacity: .9; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before { animation: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <div class="emblem" aria-hidden="true">
+      <!-- Условная медицинская эмблема, не знак Красного Креста -->
+      <svg viewBox="0 0 64 64" fill="none">
+        <path
+          d="M26 10h12v16h16v12H38v16H26V38H10V26h16V10Z"
+          fill="currentColor"
+        />
+      </svg>
+    </div>
+
+    <p class="label">Личная визитка врача</p>
+    <h1 id="name"></h1>
+    <p class="specialty" id="specialty"></p>
+
+    <section class="details" aria-label="Контактные данные">
+      <p><strong id="clinic"></strong></p>
+      <p id="address"></p>
+      <p id="phone"></p>
+    </section>
+
+    <div class="actions">
+      <a class="button" id="call">Позвонить</a>
+      <button class="button secondary" id="save" type="button">
+        Сохранить контакт
+      </button>
+    </div>
+
+    <p class="note">
+      Контакт сохранится в формате vCard.<br>
+      На телефоне может потребоваться подтвердить добавление.
+    </p>
+  </main>
+
+  <script>
+    // ЗАМЕНИТЕ ЗАГЛУШКИ НА ДАННЫЕ ВРАЧА ПЕРЕД ПУБЛИКАЦИЕЙ.
+    const doctor = {
+      name: "Хасароков Мурат Азнаурович",
+      specialty: "Травматолог-ортопед",
+      clinic: "MedSwiss",
+      address: "ул. Гашека, 12",
+      phone: "+79251555246",
+      phoneDisplay: "+7 (925) 155‑52‑46",
+      email: "doctor@example.org"
+    };
+
+    document.title = `${doctor.name} — ${doctor.specialty}`;
+
+    for (const key of ["name", "specialty", "clinic", "address"]) {
+      document.getElementById(key).textContent = doctor[key];
+    }
+
+    document.getElementById("phone").textContent = doctor.phoneDisplay;
+    document.getElementById("call").href = `tel:${doctor.phone}`;
+
+    // Экранирование специальных символов текстовых полей vCard.
+    const escapeVCard = (value) => String(value)
+      .replace(/\\/g, "\\\\")
+      .replace(/\r\n|\r|\n/g, "\\n")
+      .replace(/;/g, "\\;")
+      .replace(/,/g, "\\,");
+
+    document.getElementById("save").addEventListener("click", () => {
+      const lines = [
+        "BEGIN:VCARD",
+        "VERSION:3.0",
+        `FN:${escapeVCard(doctor.name)}`,
+        `ORG:${escapeVCard(doctor.clinic)}`,
+        `TITLE:${escapeVCard(doctor.specialty)}`,
+        `TEL;TYPE=WORK,VOICE:${doctor.phone}`,
+        `EMAIL;TYPE=INTERNET:${escapeVCard(doctor.email)}`,
+        `ADR;TYPE=WORK:;;${escapeVCard(doctor.address)};;;;`
+      ];
+
+      if (location.protocol === "https:") {
+        lines.push(`URL:${location.href.split("#")[0]}`);
+      }
+
+      lines.push("END:VCARD");
+
+      const file = new Blob(
+        [lines.join("\r\n") + "\r\n"],
+        { type: "text/vcard;charset=utf-8" }
+      );
+
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "doctor.vcf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    });
+  </script>
+</body>
+</html>

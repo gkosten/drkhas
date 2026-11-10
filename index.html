@@ -1,109 +1,276 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Визитка: Хасароков М.А.</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#187e7a">
+  <title>Контакты врача</title>
+
   <style>
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: #f4f6f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 28px 20px;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #173746;
+      background:
+        radial-gradient(circle at 15% 10%, #d6f2ee, transparent 50%),
+        #edf3f6;
     }
-    .premium-card {
-      width: 320px;
-      height: 480px;
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-      overflow: hidden;
+
+    .card {
+      width: min(100%, 420px);
+      padding: 40px 28px 28px;
+      border: 1px solid white;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, .97);
+      box-shadow: 0 24px 70px #17374618;
+      text-align: center;
+      animation: appear .7s ease-out both;
+    }
+
+    .portrait {
       position: relative;
-      transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s ease;
-      border: 1px solid #eef0f2;
+      width: 136px;
+      height: 136px;
+      margin: 0 auto 30px;
     }
-    .premium-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.18);
-      border-color: #2c3e50;
+
+    .portrait::before {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border: 2px solid #87c9bd;
+      border-radius: 50%;
+      animation: pulse 2.8s ease-in-out infinite;
+      pointer-events: none;
     }
-    .card-photo-wrapper {
-      height: 65%;
+
+    .photo-frame {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
+      border-radius: 50%;
+      background: #e7f5f2;
+      color: #187e7a;
+      font-size: 38px;
+      font-weight: 600;
     }
-    .card-photo {
+
+    .photo-frame img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
+      object-position: center;
     }
-    .card-content {
-      padding: 20px;
-      text-align: center;
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 6vw, 30px);
+      line-height: 1.2;
+      overflow-wrap: anywhere;
     }
-    .card-name {
-      font-size: 22px;
-      font-weight: 700;
-      color: #2c3e50;
-      margin: 0 0 6px 0;
-      line-height: 1.1;
+
+    .specialty {
+      margin: 14px 0 8px;
+      color: #187e7a;
+      font-size: 18px;
     }
-    .card-specialty {
-      font-size: 13px;
-      color: #7f8c8d;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin: 0 0 20px 0;
-      font-weight: 600;
+
+    .clinic {
+      margin: 0;
+      color: #64808c;
+      line-height: 1.5;
     }
-    .card-phone {
-      font-size: 17px;
-      color: #2980b9;
-      font-weight: 600;
-      margin: 0 0 24px 0;
-    }
-    .card-link-wrapper {
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-    }
-    .card-link {
-      font-size: 11px;
-      color: #bdc3c7;
+
+    .phone {
+      display: inline-block;
+      margin: 24px 0;
+      color: #173746;
+      font-size: 19px;
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
-    .card-link span {
-      color: #2980b9;
-      font-weight: 600;
-      transition: transform 0.3s ease;
+
+    .actions {
+      display: grid;
+      gap: 12px;
     }
-    .premium-card:hover .card-link span {
-      transform: translateX(6px);
+
+    .button {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      border: 0;
+      border-radius: 14px;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+      color: white;
+      background: #187e7a;
+    }
+
+    .button.secondary {
+      color: #173746;
+      background: #eaf0f3;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid #173746;
+      outline-offset: 4px;
+    }
+
+    .note {
+      margin: 18px 0 0;
+      color: #64808c;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(.98); opacity: .4; }
+      50% { transform: scale(1.07); opacity: .9; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before { animation: none !important; }
     }
   </style>
 </head>
+
 <body>
-  <div class="premium-card">
-    <div class="card-photo-wrapper">
-      <img src="URL_ФОТО" alt="Хасароков М.А." class="card-photo">
+  <main class="card">
+    <div class="portrait">
+      <div class="photo-frame">
+        <span id="initials" aria-hidden="true"></span>
+        <img id="photo" src="foto.png" alt="Фото врача">
+      </div>
     </div>
-    <div class="card-content">
-      <h1 class="card-name">Хасароков Мурат Азнаурович</h1>
-      <div class="card-specialty">Ортопед‑хирург</div>
-      <div class="card-phone">+7 (925) 155‑52‑46</div>
+
+    <h1 id="name"></h1>
+    <p class="specialty" id="specialty"></p>
+    <p class="clinic" id="clinic"></p>
+
+    <a class="phone" id="phone"></a>
+
+    <div class="actions">
+      <a class="button" id="call">Позвонить</a>
+      <button class="button secondary" id="save" type="button">
+        Сохранить контакт
+      </button>
     </div>
-    <div class="card-link-wrapper">
-      <a href="https://www.medswiss.ru/nashi-vrachi/khasarokov-murat-aznaurovich/" class="card-link">
-        Профиль на сайте <span>→</span>
-      </a>
-    </div>
-  </div>
+
+    <p class="note">
+      При сохранении телефон предложит открыть<br>
+      или скачать карточку контакта.
+    </p>
+  </main>
+
+  <script>
+    // Замените эти данные перед публикацией.
+    const doctor = {
+      lastName: "Фамилия",
+      firstName: "Имя",
+      middleName: "Отчество",
+      specialty: "Травматолог-ортопед",
+      clinic: "Название клиники",
+      phone: "+70000000000",
+      phoneDisplay: "+7 (000) 000-00-00"
+    };
+
+    const fullName = [
+      doctor.lastName,
+      doctor.firstName,
+      doctor.middleName
+    ].filter(Boolean).join(" ");
+
+    document.title = `${fullName} — ${doctor.specialty}`;
+
+    document.getElementById("name").textContent = fullName;
+    document.getElementById("specialty").textContent = doctor.specialty;
+    document.getElementById("clinic").textContent = doctor.clinic;
+
+    const phoneLink = document.getElementById("phone");
+    phoneLink.textContent = doctor.phoneDisplay;
+    phoneLink.href = `tel:${doctor.phone}`;
+
+    document.getElementById("call").href = `tel:${doctor.phone}`;
+
+    document.getElementById("initials").textContent = [
+      doctor.firstName,
+      doctor.lastName
+    ].map(part => part.trim().charAt(0)).join("");
+
+    const photo = document.getElementById("photo");
+    photo.alt = `Фото: ${fullName}`;
+
+    const hidePhoto = () => { photo.hidden = true; };
+    photo.addEventListener("error", hidePhoto);
+
+    // Обработка случая, когда ошибка загрузки уже произошла.
+    if (photo.complete && photo.naturalWidth === 0) hidePhoto();
+
+    const escapeVCard = value => String(value)
+      .replace(/\\/g, "\\\\")
+      .replace(/\r\n|\r|\n/g, "\\n")
+      .replace(/;/g, "\\;")
+      .replace(/,/g, "\\,");
+
+    document.getElementById("save").addEventListener("click", () => {
+      const structuredName = [
+        doctor.lastName,
+        doctor.firstName,
+        doctor.middleName,
+        "",
+        ""
+      ].map(escapeVCard).join(";");
+
+      const lines = [
+        "BEGIN:VCARD",
+        "VERSION:3.0",
+        `N:${structuredName}`,
+        `FN:${escapeVCard(fullName)}`,
+        `ORG:${escapeVCard(doctor.clinic)}`,
+        `TITLE:${escapeVCard(doctor.specialty)}`,
+        `TEL;TYPE=WORK,VOICE:${doctor.phone}`
+      ];
+
+      if (location.protocol === "https:") {
+        lines.push(`URL:${location.href.split("#")[0]}`);
+      }
+
+      lines.push("END:VCARD");
+
+      const file = new Blob(
+        [lines.join("\r\n") + "\r\n"],
+        { type: "text/vcard;charset=utf-8" }
+      );
+
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "doctor.vcf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    });
+  </script>
 </body>
 </html>
